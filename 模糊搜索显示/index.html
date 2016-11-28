@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="keywords" content="页内查找,jquery" />
+<meta name="description" content="Helloweba演示平台，演示HTML、CSS、jquery、PHP实例" />
+<title>演示：jQuery实现页内查找相关内容</title>
+<link rel="stylesheet" type="text/css" href="../css/main.css" />
+<style type="text/css">
+.demo{width:800px; margin:40px auto 0 auto; min-height:250px; font-size:14px}
+.demo p{line-height:22px}
+.demo p strong{color:#f30}
+.highlight { background: yellow; color: red; }
+.prelight { background: blue; color: white; }
+#tip { background: #FFFFCC; border: 1px solid #999; width: 200px; text-align: center; display: none; font-size: 12px; }
+#search_box { background: white; opacity: 0.8; text-align:right }
+#search_btn { background: #0f79be; margin-top: 6px; border-radius: 2px; border: 0px; width: 100px; line-height: 24px; color: white; }
+#searchstr { font-size: 14px; height: 20px; }
+</style>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+(function($) {
+    $.fn.fixDiv = function(options) {
+        var defaultVal = {
+            top: 10
+        };
+        var obj = $.extend(defaultVal, options);
+        $this = this;
+        var _top = $this.offset().top;
+        var _left = $this.offset().left;
+        $(window).scroll(function() {
+            var _currentTop = $this.offset().top;
+            var _scrollTop = $(document).scrollTop();
+            if (_scrollTop > _top) {
+                $this.offset({
+                    top: _scrollTop + obj.top,
+                    left: _left
+                });
+            } else {
+                $this.offset({
+                    top: _top,
+                    left: _left
+                });
+            }
+        });
+        return $this;
+    };
+})(jQuery);
+$(function(){
+    $("#search_box").fixDiv({ top: 0 });
+    $('#search_btn').click(highlight);//点击search时，执行highlight函数；
+    $('#searchstr').keydown(function (e) {
+        var key = e.which;
+        if (key == 13) highlight();
+    })
+    
+    var i = 0;
+    var sCurText;
+    function highlight(){
+        clearSelection();//先清空一下上次高亮显示的内容；
+        
+        var flag = 0;
+        var bStart = true;
+        
+        
+        $('#tip').text('');
+        $('#tip').hide();
+        var searchText = $('#searchstr').val();
+        var _searchTop = $('#searchstr').offset().top+30;
+        var _searchLeft = $('#searchstr').offset().left;
+        if($.trim(searchText)=="" || $.trim(searchText)=='.'){
+            //alert(123);
+            showTips("请输入查找车站名",_searchTop,3,_searchLeft);
+            return;
+        }
+            
+            
+        var searchText = $('#searchstr').val();//获取你输入的关键字；
+        var regExp = new RegExp(searchText, 'g');//创建正则表达式，g表示全局的，如果不用g，则查找到第一个就不会继续向下查找了；
+        var content = $("#content").text();
+        if (!regExp.test(content)) {
+            showTips("没有找到要查找的车站",_searchTop,3,_searchLeft);
+            return;
+        } else {
+            if (sCurText != searchText) {
+                i = 0;
+                sCurText = searchText;
+             }
+         }
+        
+        $('p').each(function(){
+            var html = $(this).html();
+            var newHtml = html.replace(regExp, '<span class="highlight">'+searchText+'</span>');//将找到的关键字替换，加上highlight属性；
+
+            $(this).html(newHtml);//更新；
+            flag = 1;
+        });
+        
+        if (flag == 1) {
+            if ($(".highlight").size() > 1) {
+                var _top = $(".highlight").eq(i).offset().top+$(".highlight").eq(i).height();
+                var _tip = $(".highlight").eq(i).parent().find("strong").text();
+                if(_tip=="") _tip = $(".highlight").eq(i).parent().parent().find("strong").text();
+                var _left = $(".highlight").eq(i).offset().left;
+                var _tipWidth = $("#tip").width();
+                if (_left > $(document).width() - _tipWidth) {
+                        _left = _left - _tipWidth;
+                }
+                $("#tip").html(_tip).show();
+                $("#tip").offset({ top: _top, left: _left });
+                $("#search_btn").val("查找下一个");
+            }else{
+                var _top = $(".highlight").offset().top+$(".highlight").height();
+                var _tip = $(".highlight").parent().find("strong").text();
+                var _left = $(".highlight").offset().left;
+                $('#tip').show();
+                $("#tip").html(_tip).offset({ top: _top, left: _left });
+            }
+            $("html, body").animate({ scrollTop: _top - 50 });
+            i++;
+            if (i > $(".highlight").size() - 1) {
+                i = 0;
+            }
+        }
+    }
+    function clearSelection(){
+        $('p').each(function(){
+            //找到所有highlight属性的元素；
+            $(this).find('.highlight').each(function(){
+                $(this).replaceWith($(this).html());//将他们的属性去掉；
+            });
+        });
+    }
+    
+    //mask
+    var tipsDiv = '<div class="tipsClass"></div>'; 
+    $( 'body' ).append( tipsDiv );
+    function showTips( tips, height, time,left ){ 
+        var windowWidth = document.documentElement.clientWidth; 
+        $('.tipsClass').text(tips);
+        $( 'div.tipsClass' ).css({ 
+        'top' : height + 'px', 
+        'left' :left + 'px', 
+        'position' : 'absolute', 
+        'padding' : '8px 6px', 
+        'background': '#000000', 
+        'font-size' : 14 + 'px', 
+        'font-weight': 900,
+        'margin' : '0 auto', 
+        'text-align': 'center', 
+        'width' : 'auto', 
+        'color' : '#fff', 
+        'border-radius':'2px', 
+        'opacity' : '0.8' ,
+        'box-shadow':'0px 0px 10px #000',
+        '-moz-box-shadow':'0px 0px 10px #000',
+        '-webkit-box-shadow':'0px 0px 10px #000'
+        }).show(); 
+        setTimeout( function(){$( 'div.tipsClass' ).fadeOut();}, ( time * 1000 ) ); 
+    } 
+})
+/**/
+</script>
+</head>
+
+<body>
+<div id="header">
+   <div id="logo"><h1><a href="http://www.helloweba.com" title="返回helloweba首页">helloweba</a></h1></div>
+   <div class="demo_topad"><script src="/js/ad_js/demo_topad.js" type="text/javascript"></script></div>
+</div>
+
+<div id="main">
+   <h2 class="top_title"><a href="http://www.helloweba.com/view-blog-246.html">jQuery实现页内查找相关内容</a></h2>
+   <div class="demo">
+     <div id="search_box">
+        <input class="textbox" id="searchstr" type="text" size="10" name="searchstr" />　
+        <input class="sbttn" id="search_btn" type="button" value="页内查找" />
+     </div>
+<div id="content">
+<p>　　<strong>8：00 起售车站</strong><br />
+　　安阳、白城、北京西、成都东、大庆、大庆西、东莞、东莞东、惠州、金华南、缙云、九江、兰州、丽水、临汾、南充、齐齐哈尔、青田、日照、山海关、汕头、松原、温州、乌兰浩特、乌鲁木齐、武昌、武义、西安、永康、运城。</p>
+<p>　　<strong>9：00 起售车站</strong><br />
+　　阿克苏、宝鸡、北京北、茶陵、长兴南、成都、大同、德清西、海宁、济宁、加格达奇、嘉兴、库尔勒、奎屯、昆明、拉萨、漠河、那曲、讷河、宁波、萍乡、上虞、绍兴、沈阳北、宜昌、宜昌东、宜春、余姚、湛江、郑州。</p>
+<p>　　<strong>9：30 起售车站</strong><br />
+　　深圳。</p>
+<p>　　<strong>10：00 起售车站</strong><br />
+　　阿拉山口、北京、北屯市、贵阳、哈密、哈密南、和田、霍尔果斯、喀什、柳园、南昌、南昌西、青岛、青岛北、沈阳、伊宁。</p>
+<p>　　<strong>10：30 起售车站</strong><br />
+　　深圳东、深圳西。</p>
+<p>　　<strong>11：00/14：00起售车站（C、D字头列车11：00，G字头列车14：00）</strong><br />
+　　安亭北、安阳东、鞍山西、鳌江、鲅鱼圈、蚌埠南、宝华山、宝鸡南、保定东、北滘、北京南、碧江、滨海、滨海北、博鳌、沧州西、苍南、昌图西、长春西、长沙南、长兴、常州北、潮汕、潮阳、郴州西、赤壁北、滁州、丹徒、丹阳北、德惠西、德清、德州东、定远、定州东、东升、都江堰、防城港北、肥东、奉化、扶余北、福安、福鼎、福清、福州南、盖州西、高碑店东、高邑西、公主岭南、巩义南、古镇、光明城、广州南、哈尔滨西、海城西、海口东、海宁西、邯郸东、涵江、汉川、合肥北城、贺胜桥东、鹤壁东、横沟桥东、衡山西、衡阳东、红安西、红光镇、鲘门、湖州、虎门、花桥、华山北、淮南东、惠东、惠山、惠州南、济南西、嘉善南、嘉兴南、江门、江宁、角美、金山北、金寨、晋江、句容西、军粮城北、开原西、葵潭、昆山南、廊坊、乐清、耒阳西、离堆公园、溧水、溧阳、连江、临海、灵宝西、陵水、龙嘉、龙山镇、陆丰、滦河、罗源、洛阳龙门、漯河西、美兰、汨罗东、庙山、明港东、明珠、南湖东、南京南、南靖、南朗、南头、南翔北、宁德、宁海、彭州、郫县西、莆田、普安、普宁、普湾、戚墅堰、岐山、前山、青城山、清远、庆盛、琼海、曲阜东、泉州、饶平、容桂、瑞安、三门峡南、三门县、山坡东、汕尾、上海虹桥、上海西、上虞北、韶关、绍兴北、绅坊、深圳北、深圳坪山、渑池南、石龙、双城北、顺德、顺德学院、四平东、松江南、苏州北、苏州新区、苏州园区、宿州东、台州、太姥山、泰安、汤逊湖、唐家湾、滕州东、天津南、铁岭西、桐乡、土地堂东、瓦房店西、瓦屋山、万宁、渭南北、温岭、温州南、文昌、乌龙泉南、无锡东、无锡新区、武清、西安北、犀浦、霞浦、厦门北、仙林、咸宁北、咸宁东、咸宁南、咸阳秦都、小榄、孝感北、新会、新乡东、信阳东、邢台东、徐州东、许昌东、亚龙湾、雁荡山、阳澄湖、杨陵南、宜兴、英德西、迎宾路、营口东、永嘉、余杭、余姚北、岳阳东、云霄、枣庄、漳浦、樟木头、诏安、镇江南、正定机场、郑州东、枝江北、纸坊东、中山、中山北、株洲西、珠海、珠海北、驻马店西、庄桥、涿州东。</p>
+<p>　　<strong>12：00 起售车站</strong><br />
+　　广州。</p>
+<p>　　<strong>12：30 起售车站</strong><br />
+　　阿克陶、阿图什、巴楚、博乐、布列开、福海、格尔木、广元、汉口、和静、和什托洛盖、精河、精河南、克拉玛依、库车、轮台、玛纳斯湖、绵阳、墨玉、尼勒克、皮山、沙湾县、莎车、鄯善、石河子、疏勒、天津、吐鲁番、乌西、五五、新和、焉耆、叶城、伊宁东、英吉沙、泽普。</p>
+<p>　　<strong>13：00 起售车站</strong><br />
+　　安庆、安庆西、亳州、长春、长治北、巢湖、敦煌、阜南、阜阳、哈尔滨、汉中、合肥、淮南、黄梅、霍邱、济南、济南东、嘉峪关、六安、庐江、全椒、三堂集、石家庄、石家庄北、舒城、水家湖、宿松、太湖、太原、天柱山、桐城、乌海西、武汉、厦门、厦门高崎、叶集、重庆北。</p>
+<p>　　<strong>13：30 起售车站</strong><br />
+　　坂田、常平、潮州、春湾、大埔、丰顺、佛山、高州、广州北、广州东、和平、河源、华城、惠州西、揭阳、乐昌、雷州、龙川、茂名东、梅州、坪石、三水、韶关东、新兴县、信宜、兴宁、徐闻、阳春、英德、源潭、湛江西、肇庆。</p>
+<p>　　<strong>14：30 起售车站</strong><br />
+　　杭州、杭州东、江山、金华西、兰溪、龙游、衢州、义乌、诸暨。</p>
+<p>　　<strong>15：00 起售车站</strong><br />
+　　滨江、长沙、常德、达州、大理、德州、赣州、广水、哈尔滨东、海湾、邯郸、吉安、吉林、集宁南、嘉善、井冈山、昆山、丽江、芦潮港、麻城、内江、南宁、商丘、上海、上海南、十堰、松江、苏州、威海、无锡、西宁西、香坊、信阳、延安、昭通。</p>
+<p>　　<strong>16：00起售车站</strong><br />
+　　安康、佳木斯、罗平、威舍、新乡、银川、赤峰、大连、砀山、德令哈、东海县、福州、海石湾、衡阳、呼和浩特、呼和浩特东、黄口、湟源、潢川、乐都、连云港、连云港东、柳州、六盘水、洛阳、牡丹江、邳州、平安驿、平顶山、秦皇岛、唐山、通辽、夏邑县、新沂、徐州、烟台、榆林、虞城县、张家界、重庆、周口、驻马店、遵义。</p>
+<p>　　<strong>17：00 起售车站</strong><br />
+　　鞍山、常州、丹东、丹阳、抚顺北、阜新、菏泽、红果、晋城、景德镇、南京、盘锦、曲靖、上饶、神木、绥芬河、襄阳、襄阳东、宣威、鹰潭、镇江、中华门、白山市、包头、包头东、承德、东台、恩施、阜宁、桂林、桂林北、海安县、海拉尔、韩城、怀化、淮安、建湖、江都、姜堰、利川、临沂、龙岩、漯河、满洲里、南通、南阳、攀枝花、蕲春、如皋、邵阳、沭阳、泗洪、泗阳、泰州、通化、图们、西昌、延吉、盐城、扬州、洋河、永州、张家口、张家口南、栟茶、如东。</p>
+<p>　　<strong>18：00 起售车站</strong><br />
+　　阿城、阿尔山、阿金、阿里河、阿龙山、阿木尔、安达、安广、安化、安家、安口窑、安龙、安陆、安平、安顺、安塘、安图、安溪、昂昂溪、敖力布告、八达岭、八角台、八面城、八面通、八仙筒、巴东、巴林、巴山、巴彦高勒、巴中、霸州、白壁关、白河、白河东、白河县、白涧、白奎堡、白狼、白泉、白沙、白石山、白水江、白音察干、白音胡硕、白音他拉、白银市、白银西、白云鄂博、百色、柏果、蚌埠、宝坻、宝拉格、宝林、宝龙山、宝泉岭、保定、保康、北安、北戴河、北海、北京东、北流、北马圈子、北票南、北台、背荫河、贲红、本溪、本溪湖、笔架山、泊头、勃利、博克图、博山、博兴、布海、蔡家沟、蔡家坡、沧州、苍石、曹县、草海、草河口、草市、册亨、岑溪、查布嘎、察素齐、岔江、柴岗、柴沟堡、柴河、昌乐、昌黎、昌平、昌平北、昌图、长春南、长甸、长葛、长岭子、长山屯、长寿、长寿北、长汀、长汀、钟家村、钟祥、重庆南、周家、周家屯、周水子、朱家沟、朱日和、朱杨溪、株洲、诸城、竹园坝、卓资东、卓资山、涿州、资溪、资阳、资中、淄博、子长、子洲、紫阳、自贡、棕溪、邹城、柞水、广通北、禄丰南、昆阳。</p>
+</div>
+<div id="tip"></div>
+    
+ <div class="ad_76090"><script src="/js/ad_js/bd_76090.js" type="text/javascript"></script></div><br/>
+</div>
+</div>
+
+<div id="footer">
+    <p>Powered by helloweba.com  允许转载、修改和使用本站的DEMO，但请注明出处：<a href="http://www.helloweba.com">www.helloweba.com</a></p>
+</div>
+<span id="stat"><script type="text/javascript" src="/js/tongji.js"></script></span>
+</body>
+</html>
