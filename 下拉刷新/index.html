@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="author" content="">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title></title>
+	<script src="js/app.js"></script>
+	<script src="js/iscroll.js"></script>
+	<script type="text/javascript" src="js/iscroll-probe.js" ></script>
+	<script src="js/jquery.js"></script>
+	<style>
+		html,body,#wrapper{
+			width:100%;
+			padding:0;
+			margin: 0;
+			border:0;
+			font:"微软雅黑" 12px;
+		}
+		#wrapper{
+			width:100%;
+			position:absolute;
+			top:45px;
+			bottom:48px;
+			overflow: hidden;
+		}
+		#scroller{
+			porsition: absolute;
+			width:100%;
+			padding: 0;
+			margin: 0;
+		}
+		#thelist{
+			list-style: none;
+			width:100%;
+			padding:0;
+			margin: 0;
+			
+		}
+		#thelist li{
+			width:100%;
+			height:40px;
+			line-height: 40px;
+			border-bottom: 1px solid #ddd;
+			border-top:1px solid #eee;
+			background: #fafafafa;
+			
+		}
+		header{
+			height:45px;
+			width:100%;
+			background: gray;
+			line-height: 45px;
+			font-size: 2rem;
+			text-align: center
+		}
+		#pullDown{
+			background: #ffffff;
+			height: 40px;
+			line-height: 40px;
+			border-bottom: 1px solid red;
+		}
+		#pullDown .pullDownIcon{
+			display: block;
+			background: yellow;
+			float: left;
+			width:40px;
+			height:40px;
+			background:url(img/1.png)no-repeat 0 0;
+			background-size:40px 80px ;
+			-webkit-background-size: 40px 80px;
+			-webkit-transition-property: -webkit-transform;
+			-webkit-transition-duration: 250ms;
+			
+		}
+		#pullDown .pullDownIcon {
+				-webkit-transform: rotate(0deg) translateZ(0);
+		}
+			
+		#pullDown.flip .pullDownIcon {
+				-webkit-transform: rotate(-180deg) translateZ(0);
+			}
+			
+		#pullDown.loading .pullDownIcon{
+				background-position: 0 100%;
+				-webkit-transform: rotate(0deg) translateZ(0);
+				-webkit-transition-duration: 0ms;
+				-webkit-animation-name: loading;
+				-webkit-animation-duration: 2s;
+				-webkit-animation-iteration-count: infinite;
+				-webkit-animation-timing-function: linear;
+			}
+			@-webkit-keyframes loading {
+				from {
+					-webkit-transform: rotate(0deg) translateZ(0);
+				}
+				to {
+					-webkit-transform: rotate(360deg) translateZ(0);
+				}
+			}
+	</style>
+</head>
+<body>
+	<header>header</header>
+	<div id="wrapper">
+		<div id="scroller">
+			<div id="pullDown">
+				<span class="pullDownIcon"></span>
+				<span class="pullDownLabel"></span>
+			</div>
+			<ul id="thelist">
+				<li class="row1 pretty">1</li>
+				<li class="row2 pretty">2</li>
+				<li class="row3 pretty">3</li>
+				<li class="row4 pretty">4</li>
+				<li class="row5 pretty">5</li>
+				<li class="row6 pretty">6</li>
+				<li class="row7 pretty">7</li>
+				<li class="row8 pretty">8</li>
+				<li class="row9 pretty">9</li>
+				<li class="row10 pretty">10</li>
+				<li class="row11 pretty">11</li>
+				<li class="row12 pretty">12</li>
+				<li class="row13 pretty">13</li>
+				<li class="row14 pretty">14</li>
+				<li class="row15 pretty">15</li>
+				<li class="row16 pretty">16</li>
+				<li class="row17 pretty">17</li>
+				<li class="row18 pretty">18</li>
+				<li class="row19 pretty">19</li>
+				<li class="row20 pretty">20</li>
+				<li class="row21 pretty">21</li>
+				<li class="row22 pretty">22</li>
+				<li class="row23 pretty">23</li>
+				<li class="row24 pretty">24</li>
+				<li class="row25 pretty">25</li>
+				<li class="row26 pretty">26</li>
+				<li class="row27 pretty">27</li>
+				<li class="row28 pretty">28</li>
+				<li class="row29 pretty">29</li>
+				<li class="row30 pretty">30</li>
+			</ul>
+		</div>
+	</div>
+	
+</body>
+<script>
+
+	$(function(){
+		$(window).load(function(){
+			//alert(1)	;
+			var generatedCount = 0;
+			var pullDownObj = $("#pullDown");
+			var pullDownOffset = pullDownObj.height();
+
+			var myScroll = new IScroll('#wrapper',{
+				//需要使用iscroll-probe.js才能生效
+				//probeType：1  滚动不繁忙的时候触发
+				//probeType：2  滚动时每隔一定时间触发;
+				//probeType：3  每滚动一像素触发一次
+				probeType: 2,
+				//是否使用CSS3的Transition属性，否则使用requestAnimationFram代替
+				useTransition:true,
+				//js库里封装的,为了让背景图隐藏
+				startY: -pullDownOffset,
+			});
+			
+			console.log(myScroll);
+			myScroll.on('beforeScrollStart', function() {
+					console.log('滚动开始前');	
+			})
+			
+			myScroll.on('scrollStart',function(){
+				console.log('滚动开始');
+				if(pullDownObj.hasClass('loading')){
+					pullDownObj.attr('class','');
+				}
+				
+			})
+		
+			
+				myScroll.on('scroll', function() {
+					console.log('滚动开始中');
+					//上一次的滚动方向(-1 下/右, 0 保持原状, 1 上/左)
+					console.log(this);
+					console.log("移动方向" + this.directionY);
+					console.log("当前的位置" + this.y);
+					
+					if(this.y > 30 && !pullDownObj.hasClass('flip')) {
+						pullDownObj.addClass('flip');
+						pullDownObj.find('.pullDownLabel').html('Release to refresh...');
+
+						
+					} else if(this.y<30 && pullDownObj.hasClass('flip')){
+						pullDownObj.attr('class','');
+						pullDownObj.find('.pullDownLabel').html('Pull down load more...');
+
+					}
+					
+				})
+				
+			
+			
+			myScroll.on('scrollEnd', function() {
+					console.log('滚动结束');
+		//			console.log("移动方向" + this.directionY);
+					if(pullDownObj.hasClass('flip')){
+						pullDownObj.addClass('loading');
+						pullDownObj.find('.pullDownLabel').html('Loading...');
+						pullDownAction();
+					}
+				})
+			function pullDownAction(){
+				console.log('下拉刷新成功');
+				setTimeout(function(){
+					var tmpStr = '';
+					for(var i = 0;i<5;i++){
+						tmpStr+="<li>测试"+ i + "</li>"
+					}
+					$('#thelist').prepend(tmpStr);
+					myScroll.refresh();
+					myScroll.scrollTo(0,-pullDownOffset);
+				},1000)
+			}
+			
+		})
+		
+	})
+</script>
+</html>
