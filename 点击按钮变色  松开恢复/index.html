@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>按下变色，松开恢复</title>
+		<style>
+			.btn {
+				font-size: 1.5em;
+				line-height: 2em;
+				) text-align: center;
+				color: #fff;
+				background: #ce4f54;
+				width: 200px;
+			}
+		</style>
+		<title>无标题文档</title>
+	</head>
+
+	<body>
+		<div class="btn">测试Test</div>
+		<script src="js/jquery.js"></script>
+	</body>
+	<script type="text/javascript">
+	
+		document.body.addEventListener("touchstart", function() {
+			var btn = document.getElementsByClassName("btn")[0];
+			btn.style.background = "blue";
+			btn.style.color = "red";
+		})
+		document.body.addEventListener("touchend", function() {
+			var btn = document.getElementsByClassName("btn")[0]
+			btn.style.background = "#ce4f54";
+			btn.style.color = "#fff";
+		})
+	</script>
+
+</html>
