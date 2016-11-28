@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="keywords" content="00" />
+		<meta name="description" content="0" />
+		<title>test</title>
+		<script type="text/JavaScript" src="js/jquery.js"></script>
+	</head>
+	<script type="text/javascript">
+		function show2() {
+			$("#gotodiv").css("display", "block");
+			$("#goto").focus();
+		}
+
+		function show() {
+			$("#gotodiv").css("display", "block");
+			$("#goto").focus();
+			$("#goto").attr("onblur", "");
+		}
+
+		function noshow() {
+			$("#goto").attr("onblur", "fadeOut()");
+		}
+
+		function fadeOut() {
+			$("#gotodiv").css("display", "none");
+		}
+	</script>
+
+	<body>
+
+		<div class="wp">
+
+			<input type="button" value="转页" onclick="show2()">
+
+			<div style="display:none;width:150px;border:solid 1px #A0A0A0;margin:0;height:40px;" id="gotodiv" onmouseover="show('gotodiv')" onmouseout="noshow()">
+				<span style="color:#798699">跳转到</span>
+				<input type="text" id="goto" style="width:30px" onblur="fadeOut()">
+				<span style="color:#798699">页</span>
+				<input type="button" value="确定" style="width:50px" onclick="fadeOut()" />
+			</div>
+		</div>
+	</body>
+
+</html>

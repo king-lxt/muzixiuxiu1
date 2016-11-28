@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title></title>
+		<style>
+			.hide {
+				display: none;
+			}
+			
+			.con {
+				width: 500px;
+				height: 300px;
+				background: #000;
+			}
+		</style>
+		<title>点击弹出层 ，点击弹出层外区域关闭弹出层jquery特效</title>
+		<script type="text/javascript" src="http://jt.875.cn/js/jquery.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$(".down").click(function(e) {
+					e.stopPropagation();
+					$(".con").removeClass("hide");
+				});
+
+				$(document).click(function() {
+					if(!$(".con").hasClass("hide")) {
+						$(".con").addClass("hide");
+					}
+				});
+
+				$(".con").click(function(e) {
+					e.stopPropagation(); //阻止事件向上冒泡
+				});
+
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="down">click</div>
+		<div class="con hide">show-area
+			<a style="color:red;">关闭</a>
+
+		</div>
+	</body>
+
+</html>
