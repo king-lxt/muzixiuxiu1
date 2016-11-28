@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>菜鸟教程(runoob.com)</title>
+		<script src="js/jquery.js"></script>
+		<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+		<!--<script src="js/jquery.validate.js"></script>-->
+		<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+		<!--<script src="js/jquery.validate.messages_cn.js"></script>-->
+		<script>
+			$.validator.setDefaults({
+				submitHandler: function() {
+					alert("提交事件!");
+				}
+			});
+			window.onload = function() {
+				// 在键盘按下并释放及提交后验证提交表单
+				jQuery.validator.addMethod("userneme1", function(value, element) {
+					return this.optional(element) || /^[a-zA-z][a-zA-Z0-9_]{3,9}$/.test(value);
+				}, "以字母开头，长度在6-12之间，只能包含字符、数字和下划线。");
+
+				//  手机号码验证
+				jQuery.validator.addMethod("isMobile", function(value, element) {
+					var length = value.length;
+					var mobile = /^(((13[0-9]{1})|(15[0-9]{1}))+\d{8})$/;
+					return this.optional(element) || (length == 11 && mobile.test(value));
+				}, "请正确填写您的手机号码");
+				//手机验证码
+				jQuery.validator.addMethod("identifyingCode", function(value, element) {
+					return this.optional(element) || /^\d{6,6}$/.test(value);
+				}, "6位数字验证码");
+				$("#signupForm").validate({
+					rules: {
+						//用户名
+						username: {
+							required: true,
+							userneme1: true,
+							minlength: 2,
+						},
+						//密码
+						password: {
+							required: true,
+							minlength: 6
+						},
+						//确认密码
+						confirm_password: {
+							required: true,
+							minlength: 6,
+							equalTo: "#password"
+						},
+						//邮箱
+						email: {
+							required: true,
+							email: true
+						},
+						//手机号
+						phone: {
+							required: true,
+							isMobile: true
+						},
+						//验证码
+						code: {
+							required: true,
+							minlength: 6,
+							maxlength: 6,
+							identifyingCode:true
+						},
+						"topic[]": {
+							required: "#newsletter:checked",
+							minlength: 2
+						},
+						agree: "required"
+					},
+					messages: {
+						username: {
+							required: "请输入用户名",
+							minlength: "用户名必需由两个字母组成"
+						},
+						password: {
+							required: "请输入密码",
+							minlength: "密码长度不能小于 5 个字母"
+						},
+						confirm_password: {
+							required: "请输入密码",
+							minlength: "密码长度不能小于 5 个字母",
+							equalTo: "两次密码输入不一致"
+						},
+						email: "请输入一个正确的邮箱",
+						agree: "请接受我们的声明",
+						topic: "请选择两个主题"
+					},
+					phone: {
+						required: "请输入您的联系电话",
+						isPhone: "请输入一个有效的联系电话"
+					},
+					code: {
+						required: "请输入验证码",
+					},
+				});
+			};
+		</script>
+		<style>
+			.error {
+				color: red;
+			}
+		</style>
+	</head>
+
+	<body>
+		<form class="cmxform" id="signupForm" method="get" action="">
+			<fieldset>
+				<legend>验证完整的表单</legend>
+				<p>
+					<label for="username">用户名</label>
+					<input id="username" name="username" type="text">
+				</p>
+				<p>
+					<label for="password">密码</label>
+					<input id="password" name="password" type="password">
+				</p>
+				<p>
+					<label for="confirm_password">验证密码</label>
+					<input id="confirm_password" name="confirm_password" type="password">
+				</p>
+				<p>
+					<label for="email">Email</label>
+					<input id="email" name="email" type="email">
+				</p>
+				<p>
+					<label for="phone">电话号码</label><em>*</em>
+					<input id="phone" name="phone" size="25" />
+				</p>
+				<p>
+					<label for="code">验证码</label><em>*</em>
+					<input id="code" name="code" size="25" />
+				</p>
+				<p>
+					<input class="submit" type="submit" value="提交">
+				</p>
+			</fieldset>
+		</form>
+	</body>
+
+</html>
