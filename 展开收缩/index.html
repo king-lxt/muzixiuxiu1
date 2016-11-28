@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+
+<body>
+<script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+<script type="text/javascript">
+$(function() {
+    $("#toggle").click(function() {
+       	$(this).html( $("#content").is(":hidden") ?  "<img src='6.png'>" : "<img src='9.png'>");
+        $("#content").slideToggle();
+    });
+});
+</script>
+
+<a href="#" id="toggle"><img src='6.png'></a>
+<div id="content" style="display: none;">
+	<p>隐藏内容<p>
+	<p>隐藏内容<p>
+</div>
+</body>
+</html>
