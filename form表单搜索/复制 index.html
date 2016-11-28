@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        table{
+            -display: none;
+            width: 700px;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        td{
+            padding: 10px;
+            border: 1px solid #CCCCCC;
+        }
+    </style>
+    <script src="js/jquery.js"></script>
+    <script type="text/javascript">
+    
+//  $("#searchCon").bind("input propertychange",function(){
+        $(function(){
+            $("#searchCon").bind("input propertychange",function(){
+                $("table tr:not(':first')").hide().filter(":contains('"+$("#searchCon").val()+"')").show();
+            })
+        })
+
+    </script>
+</head>
+<body>
+    <input type="text" id="searchCon">
+    <input type="button" id="searchBtn" value="搜索">
+    <table>
+        <tr>
+            <td>姓名</td>
+            <td>性别</td>
+            <td>电话</td>
+        </tr>
+        <tr>
+            <td>张三</td>
+            <td>男</td>
+            <td>18254598745</td>
+        </tr>
+        <tr>
+            <td>小狗</td>
+            <td>女</td>
+            <td>12348541254</td>
+        </tr>
+        <tr>
+            <td>小猫</td>
+            <td>女</td>
+            <td>15245784214</td>
+        </tr>
+        <tr>
+            <td>小兔</td>
+            <td>男</td>
+            <td>18245784511</td>
+        </tr>
+    </table>
+</body>
+</html>
