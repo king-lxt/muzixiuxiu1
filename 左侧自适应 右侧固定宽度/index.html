@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title></title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			.whc_left {
+				float: left;
+				width: 100%;
+			}
+			
+			.whc_right {
+				position: relative;
+				float: right;
+				width: 230px;
+				margin-left: -230px;
+				background: red;
+			}
+			
+			.whc_left_content {
+				background: gray;
+				margin-right: 230px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="whc_container">
+			<div class="whc_left">
+				<div class="whc_left_content">
+					<p>左侧自适应</p>
+				</div>
+			</div>
+			<div class="whc_right">
+				<p>右侧定宽</p>
+			</div>
+		</div>
+	</body>
+
+</html>
