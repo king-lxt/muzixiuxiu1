@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title></title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			#wrap {
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 40px;
+				background: green;
+				line-height: 40px;
+			}
+			
+			#content {
+				width: 60px;
+				height: 40px;
+				padding-left: 20px;
+				background: blue;
+				float: left;
+			}
+			
+			#sidebar {
+				margin-left: 80px;
+				height: 40px;
+				width: auto;
+				background: greenyellow;
+			}
+			/*================*/
+			
+			.container {
+				width: 500px;
+				height: 80px;
+				background: #C2300B;
+				margin-left: 50px;
+				padding-top: 10px;
+				text-align: center;
+			}
+			
+			.center {
+				display: inline-block;
+				border: 2px solid #fff;
+			}
+			
+			.center {
+				_display: inline;
+			}
+			/*针对ie6 hack*/
+			
+			.center a {
+				float: left;
+				border: 1px solid #fff;
+				padding: 5px 10px;
+				margin: 10px;
+				color: #fff;
+				text-decoration: none;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div id="wrap">
+			<div id="content">1</div>
+			<div id="sidebar">2</div>
+		</div>
+		<!--///////////////-->
+		<div class="container">
+			<div class="center">
+				<a>1</a>
+				<a>2</a>
+				<a>3</a>
+				<div style=“clear:both”></div>
+			</div>
+	</body>
+
+</html>
